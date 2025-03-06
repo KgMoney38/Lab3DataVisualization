@@ -9,40 +9,55 @@ public class DataLoader
     public static List<DataItem> loadData(String fileName)
     {
         List<DataItem> data = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName)))
-        {
-            br.lines().forEach(line -> {
-                String [] parts = line.split(",");
-                if (parts.length == 3)
-                {
-                    data.add(new DataItem(parts[0], Double.parseDouble(parts[1]), Integer.parseInt(parts[2])));
+
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line = br.readLine();
+            String[] tokens = line.split(",");
+
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                String country = parts[0];
+
+                for (int i = 1; i < parts.length; i++) {
+                    String value = parts[i].trim().replace(",", "");
+
+                    if (!value.equals("..") && !value.isEmpty()) {
+                        try {
+                            double gdp = Double.parseDouble(value);
+                            int year = Integer.parseInt(tokens[i].trim());
+                            data.add(new DataItem(country, gdp, year));
+                        } catch (NumberFormatException e) {
+                            System.out.println("Error in parsing data");
+                        }
+                    }
                 }
-            });
-        } catch (IOException e)
+            }
+        }catch (IOException e)
         {
-            System.out.println("File not found");
+            System.out.println("Error reading file");
         }
-            return data;
+        return data;
     }
+
     public static void min(String[] args)
     {
-        List<DataItem> dataItems = DataLoader.loadData(args[0]);
+        List<DataItem> dataItems = loadData("data.csv");
 
         System.out.println("Total Data Entries: " + dataItems.size());
 
         if(!dataItems.isEmpty())
         {
-            System.out.println("First Item: " + format(dataItems.get(0)));
+            System.out.println("First Entry: " + format(dataItems.get(0)));
         }
 
         if (dataItems.size() >= 10)
         {
-            System.out.println("Tenth Item: " + format(dataItems.get(9)));
+            System.out.println("Tenth Entry: " + format(dataItems.get(9)));
         }
     }
 
     private static String format(DataItem dataItem)
     {
-        return dataItem.getItemName() + ", " + dataItem.getItemValue() + ", " + dataItem.getYear();
+        return dataItem.getCountry() + ", " + dataItem.getGDP() + ", " + dataItem.getYear();
     }
 }

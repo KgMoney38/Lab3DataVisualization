@@ -1,24 +1,24 @@
 public class DataItem
 {
-    private String itemName;
-    private double itemValue;
+    private String country;
+    private double gdp;
     private int year;
 
     public DataItem(String itemName, double itemValue, int year)
     {
-        this.itemName = itemName;
-        this.itemValue = itemValue;
+        this.country = itemName;
+        this.gdp = itemValue;
         this.year = year;
     }
 
-    public String getItemName()
+    public String getCountry()
     {
-        return itemName;
+        return country;
     }
 
-    public double getItemValue()
+    public double getGDP()
     {
-        return itemValue;
+        return gdp;
     }
 
     public int getYear()
