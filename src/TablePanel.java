@@ -22,7 +22,7 @@ public void updateTable(List<DataItem> dataItems)
     model.setRowCount(0);
     for (DataItem dataItem : dataItems)
     {
-        model.addRow(new Object[] {dataItem.getItemName(), dataItem.getItemValue(), dataItem.getYear()});
+        model.addRow(new Object[] {dataItem.getCountry(), dataItem.getGDP(), dataItem.getYear()});
     }
 }
 }

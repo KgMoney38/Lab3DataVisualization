@@ -10,24 +10,37 @@ public class DataLoader
     {
         List<DataItem> data = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName)))
+        {
             String line = br.readLine();
+            if (line == null)
+            {
+                System.out.println("File empty");
+                return data;
+            }
+
             String[] tokens = line.split(",");
 
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
+
+                if(parts.length < 2)
+                {
+                    continue;
+                }
+
                 String country = parts[0];
 
-                for (int i = 1; i < parts.length; i++) {
+                for (int i = 1; i < Math.min(parts.length, tokens.length); i++) {
                     String value = parts[i].trim().replace(",", "");
 
                     if (!value.equals("..") && !value.isEmpty()) {
                         try {
                             double gdp = Double.parseDouble(value);
-                            int year = Integer.parseInt(tokens[i].trim());
+                            int year = Integer.parseInt(parts[i].trim());
                             data.add(new DataItem(country, gdp, year));
                         } catch (NumberFormatException e) {
-                            System.out.println("Error in parsing data");
+                            System.out.println("Error parsing data");
                         }
                     }
                 }
@@ -39,9 +52,9 @@ public class DataLoader
         return data;
     }
 
-    public static void min(String[] args)
+    public static void main(String[] args)
     {
-        List<DataItem> dataItems = loadData("data.csv");
+        List<DataItem> dataItems = DataLoader.loadData("myData.csv");
 
         System.out.println("Total Data Entries: " + dataItems.size());
 
