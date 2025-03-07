@@ -22,7 +22,7 @@ public class MainFrame extends JFrame
 
     public static void main(String[] args)
     {
-        List<DataItem> dataItems = DataLoader.loadData("src/myData.csv");
+        List<DataItem> dataItems = DataLoader.loadData("src/PopularIndicators.csv");
         SwingUtilities.invokeLater(() -> new MainFrame(dataItems));
     }
 }
