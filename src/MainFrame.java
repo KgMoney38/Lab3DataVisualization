@@ -9,7 +9,7 @@ public class MainFrame extends JFrame
 
     public MainFrame(List<DataItem> dataItems)
     {
-        setTitle("Data Visualization");
+        setTitle("Data Visualization: Country GDP's for the Years 2000-2015");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
