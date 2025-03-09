@@ -3,13 +3,15 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+//Main GUI window for my table
 public class MainFrame extends JFrame
 {
     private TablePanel tablePanel;
 
     public MainFrame(List<DataItem> dataItems)
     {
-        setTitle("Data Visualization: Country GDP's for the Years 2000-2015");
+        //Set my window properties
+        setTitle("Country GDP's for the Years 2000-2015");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -20,6 +22,7 @@ public class MainFrame extends JFrame
         setVisible(true);
     }
 
+    //Launch the GUI
     public static void main(String[] args)
     {
         List<DataItem> dataItems = DataLoader.loadData("src/PopularIndicators.csv");

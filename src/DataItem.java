@@ -1,3 +1,4 @@
+//Basic class to represent and get the data items from my csv file one at a time
 public class DataItem
 {
     private String country;
