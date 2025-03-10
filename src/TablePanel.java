@@ -20,7 +20,7 @@ public class TablePanel extends JPanel
         setLayout(new BorderLayout());
 
         //Name for each column
-        String[] columnNames = {"Country", "GDP (In USD)", "Year"};
+        String[] columnNames = {"Country", "GDP (In US$)", "Year"};
 
         //Put the headers in my table
         tableModel = new DefaultTableModel(columnNames,0);

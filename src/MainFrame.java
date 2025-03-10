@@ -25,7 +25,7 @@ public class MainFrame extends JFrame
     //Launch the GUI
     public static void main(String[] args)
     {
-        List<DataItem> dataItems = DataLoader.loadData("src/PopularIndicators.csv");
+        List<DataItem> dataItems = DataLoader.loadData("src/CountryGDPs.csv");
         SwingUtilities.invokeLater(() -> new MainFrame(dataItems));
     }
 }

@@ -61,10 +61,10 @@ public class DataLoader {
     //Test method for my data loading process
     public static void main(String[] args)
     {
-        List<DataItem> data = loadData("src/PopularIndicators.csv");
+        List<DataItem> data = loadData("src/CountryGDPs.csv");
 
         //Label like header to explain what each item is
-        System.out.println("             Country    , GDP in US$    , Year");
+        System.out.println("\nColumn Headers: Country ,      GDP      , Year");
 
         //Print my first entry
         data.stream().findFirst().ifPresent(item ->
@@ -78,10 +78,13 @@ public class DataLoader {
 
         //Not for why formatting for gdp is different in my csv than my table
         //I just prefer the way decimal notation looks
-        System.out.println("NOTE: AMOUNT IS IN SCIENTIFIC NOTATION ABOVE (Converted to Decimal in My Table)");
+        System.out.println("NOTE: GDP IS IN SCIENTIFIC NOTATION ABOVE (Converted to Decimal in My Table)\n");
 
         //List total size of my data set
         System.out.println("Total Data Entries: " + data.size());
+
+        //Citation for where my data came from
+        System.out.println("\nCitation for Data in my Table: https://databank.worldbank.org/indicator/NY.GDP.MKTP.CD/1ff4a498/Popular-Indicators#");
 
     }
 
