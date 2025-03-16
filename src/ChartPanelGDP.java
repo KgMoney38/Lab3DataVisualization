@@ -1,6 +1,7 @@
 //PART 2
 
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -9,12 +10,12 @@ import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ChartPanel extends JPanel
+public class ChartPanelGDP extends JPanel
 {
     private JFreeChart chart;
     private DefaultCategoryDataset dataset;
 
-    public void ChartPanelGDP(List<DataItem> dataItems)
+    public ChartPanelGDP(List<DataItem> dataItems)
     {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder("GDP Trends"));
@@ -29,7 +30,7 @@ public class ChartPanel extends JPanel
                 dataset
         );
 
-        ChartPanel chartPanel = new ChartPanel();
+        ChartPanel chartPanel = new ChartPanel(chart);
         add(chartPanel, BorderLayout.CENTER);
     }
 

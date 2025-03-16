@@ -2,29 +2,32 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class DetailsPanel extends JPanel
 {
-    private JLabel countryLabel, gdpLabel, yearLabel;
+    private JLabel countryLabel;
+    private JLabel gdpLabel;
+    private JLabel yearLabel;
 
-    public DetailsPanel()
+    public DetailsPanel(List<DataItem> dataItems)
     {
         setLayout(new GridLayout(3,1));
-        setBorder(BorderFactory.createTitledBorder("Details"));
+        setBorder(BorderFactory.createTitledBorder("Selected Country GDP Details"));
 
-        countryLabel = new JLabel("Country");
-        gdpLabel = new JLabel("GDP");
-        yearLabel = new JLabel("Year");
+        countryLabel = new JLabel("Country: ");
+        gdpLabel = new JLabel("GDP: ");
+        yearLabel = new JLabel("Year: ");
 
         add(countryLabel);
         add(gdpLabel);
         add(yearLabel);
     }
 
-    public void updateDetails(DataItem item)
+    public void updateDetails(String country, String gdp, String year)
     {
-        countryLabel.setText("Country: " + item.getCountry());
-        gdpLabel.setText("GDP: " + item.getGDP());
-        yearLabel.setText("Year: " + item.getYear());
+        countryLabel.setText("Country: " + country);
+        gdpLabel.setText("GDP: " + gdp);
+        yearLabel.setText("Year: " + year);
     }
 }

@@ -1,3 +1,6 @@
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -8,7 +11,7 @@ public class MainFrame extends JFrame
 {
     private TablePanel tablePanel;
     private StatsPanel statsPanel;
-    private ChartPanel chartPanel;
+    private ChartPanelGDP chartPanel;
     private DetailsPanel detailsPanel;
     private SortAndFilter sortAndFilter;
 
@@ -17,7 +20,7 @@ public class MainFrame extends JFrame
     {
         //Set my window properties
         setTitle("Country GDP's for the Years 2000-2015");
-        setSize(1000, 700);
+        setSize(1200, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -28,23 +31,26 @@ public class MainFrame extends JFrame
         statsPanel = new StatsPanel(dataItems);
 
         //Chart Panel
-        chartPanel = new ChartPanel();
+        chartPanel = new ChartPanelGDP(dataItems);
 
         //Details Panel
-        detailsPanel = new DetailsPanel();
+        detailsPanel = new DetailsPanel(dataItems);
 
         //Sorting and filtering
-        sortAndFilter = new SortAndFilter();
+        sortAndFilter = new SortAndFilter(dataItems, tablePanel, chartPanel, detailsPanel);
 
-        //Layout
+        //Top panel
         JPanel topPanel = new JPanel(new GridLayout(1, 2));
         topPanel.add(statsPanel);
         topPanel.add(sortAndFilter);
 
-        JPanel rightPanel = new JPanel(new BorderLayout());
+        //Right panel chart and details
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BorderLayout());
         rightPanel.add(chartPanel, BorderLayout.CENTER);
         rightPanel.add(detailsPanel, BorderLayout.SOUTH);
 
+        //Add my panels
         add(topPanel, BorderLayout.NORTH);
         add(tablePanel, BorderLayout.CENTER);
         add(rightPanel, BorderLayout.EAST);

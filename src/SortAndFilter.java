@@ -1,3 +1,5 @@
+import org.jfree.chart.ChartPanel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Comparator;
@@ -6,67 +8,103 @@ import java.util.stream.Collectors;
 
 public class SortAndFilter extends JPanel
 {
-    private JComboBox<String> sortDropdown;
-    private JCheckBox highGDPCheckBox, year2000sCheckBox;
-    private JButton applyFilterButton;
-
-    private List<DataItem> originalData;
+    private JComboBox<String> sortOptions;
+    private JCheckBox showTop10;
+    private JCheckBox showBottom10;
     private TablePanel tablePanel;
+    private ChartPanelGDP chartPanel;
+    private DetailsPanel detailsPanel;
+    private List<DataItem> originalData;
 
-    public void FilterSortPanel(List<DataItem> dataItems, TablePanel tablePanel) {
+    public SortAndFilter(List<DataItem> dataItems, TablePanel tablePanel, ChartPanelGDP chartPanel, DetailsPanel detailsPanel)
+    {
         this.originalData = dataItems;
         this.tablePanel = tablePanel;
+        this.chartPanel = chartPanel;
+        this.detailsPanel = detailsPanel;
 
-        setLayout(new FlowLayout());
+        setLayout(new GridLayout(1,3));
         setBorder(BorderFactory.createTitledBorder("Sort and Filter"));
 
         //Sort drop
-        String[] sortOptions = {"Sort by Country", "Sort by GDP", "Sort by Year"};
-        sortDropdown = new JComboBox<>(sortOptions);
-        add(sortDropdown);
+        String[] sortChoices = {"Default", "Sort by GDP (Highest)", "Sort by GDP (Lowest)",  "Sort by Year"};
+        sortOptions = new JComboBox<>(sortChoices);
+        sortOptions.addActionListener(e -> applySorting());
 
-        //Filter check
-        highGDPCheckBox = new JCheckBox("GDP >1 Trillion");
-        year2000sCheckBox = new JCheckBox("Year 2000-2009");
-        add(highGDPCheckBox);
-        add(year2000sCheckBox);
+       //Checkbox filter
+        showTop10 = new JCheckBox("Top 10 GDP");
+        showBottom10 = new JCheckBox("Bottom 10 GDP");
 
-        //Apply Button
-        applyFilterButton = new JButton("Apply Filter(s)");
-        applyFilterButton.addActionListener(e -> applyFilters());
-        add(applyFilterButton);
+        showTop10.addItemListener(e -> applyFiltering());
+        showBottom10.addItemListener(e -> applyFiltering());
+
+        add(sortOptions);
+        add(showTop10);
+        add(showBottom10);
+
     }
-    private void applyFilters()
+
+    private void applySorting()
     {
-        List<DataItem> filteredDataItems = originalData;
+        List<DataItem> sortedData = switch (sortOptions.getSelectedItem().toString())
+        {
+            case "Sort by GDP (Highest)" -> originalData.stream()
+                    .sorted((a, b) -> Double.compare(b.getGDP(), a.getGDP()))
+                    .collect(Collectors.toList());
+
+            case "Sort by GDP (Lowest)" -> originalData.stream()
+                    .sorted((a, b) -> Double.compare(a.getGDP(), b.getGDP()))
+                    .collect(Collectors.toList());
+
+            case "Sort by Year" -> originalData.stream()
+                    .sorted((a, b) -> Integer.compare(a.getYear(), b.getYear()))
+                    .collect(Collectors.toList());
+
+            default -> originalData;
+        };
+
+        tablePanel.updateTable(sortedData);
+        chartPanel.updateChart(sortedData);
+    }
+
+    private void applyFiltering()
+    {
+        List<DataItem> filteredData = originalData;
 
         //Filter Condition
-        if (highGDPCheckBox.isSelected())
+        if (showTop10.isSelected())
         {
-            filteredDataItems = filteredDataItems.stream().filter(d -> d.getGDP() > 1_000_000_000_000L).collect(Collectors.toList());
+            filteredData = filteredData.stream()
+                    .sorted((a,b) -> Double.compare(b.getGDP(), a.getGDP()))
+                    .limit(10)
+                    .collect(Collectors.toList());
         }
-        if (year2000sCheckBox.isSelected())
+        if (showBottom10.isSelected())
         {
-            filteredDataItems= filteredDataItems.stream().filter(d -> d.getYear() >= 2000 && d.getYear() <= 2009).collect(Collectors.toList());
+            filteredData = filteredData.stream()
+                    .sorted((a,b) -> Double.compare(a.getGDP(), b.getGDP()))
+                    .limit(10)
+                    .collect(Collectors.toList());
         }
 
         //Sorting Conditions
-        String selectedsort = (String) sortDropdown.getSelectedItem();
+        String selectedsort = (String) sortOptions.getSelectedItem();
 
         if("Sort by Country".equals(selectedsort))
         {
-            filteredDataItems.sort(Comparator.comparing(DataItem::getCountry));
+            filteredData.sort(Comparator.comparing(DataItem::getCountry));
         }
         else if("Sort by GDP".equals(selectedsort))
         {
-            filteredDataItems.sort(Comparator.comparing(DataItem::getGDP).reversed());
+            filteredData.sort(Comparator.comparing(DataItem::getGDP).reversed());
         }
         else if("Sort by Year".equals(selectedsort))
         {
-            filteredDataItems.sort(Comparator.comparing(DataItem::getYear));
+            filteredData.sort(Comparator.comparing(DataItem::getYear));
         }
 
         //Update Table
-        tablePanel.updateTable(filteredDataItems);
+        tablePanel.updateTable(filteredData);
+        chartPanel.updateChart(filteredData);
     }
 }

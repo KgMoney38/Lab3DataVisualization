@@ -6,7 +6,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
-
 import static java.awt.AWTEventMulticaster.add;
 
 public class StatsPanel extends JPanel
@@ -32,12 +31,17 @@ public StatsPanel(List<DataItem> dataItems)
 
     public void updateStats(List<DataItem> dataItems)
     {
-        OptionalDouble avgGDP = dataItems.stream().mapToDouble(DataItem::getGDP).average();
-        OptionalDouble maxGDP = dataItems.stream().mapToDouble(DataItem::getGDP).max();
-        OptionalDouble minGDP = dataItems.stream().mapToDouble(DataItem::getGDP).min();
 
-        avgGDPLabel.setText("Average GDP: " + (avgGDP.isPresent() ? df.format(avgGDP.getAsDouble()) : "N/A"));
-        maxGDPLabel.setText("Highest GDP: " + (maxGDP.isPresent() ? df.format(maxGDP.getAsDouble()) : "N/A"));
-        minGDPLabel.setText("Lowest GDP: " + (minGDP.isPresent() ? df.format(minGDP.getAsDouble()) : "N/A"));
+        if (dataItems.isEmpty()) return;
+
+        double avg = dataItems.stream().mapToDouble(DataItem::getGDP).average().orElse(0);
+        double max = dataItems.stream().mapToDouble(DataItem::getGDP).max().orElse(0);
+        double min = dataItems.stream().mapToDouble(DataItem::getGDP).min().orElse(0);
+
+        avgGDPLabel.setText("Average GDP: " + df.format(avg));
+        maxGDPLabel.setText("Highest GDP: " + df.format(max));
+        minGDPLabel.setText("Lowest GDP: " + df.format(min));
+
+
     }
 }
