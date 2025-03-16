@@ -7,17 +7,47 @@ import java.util.List;
 public class MainFrame extends JFrame
 {
     private TablePanel tablePanel;
+    private StatsPanel statsPanel;
+    private ChartPanel chartPanel;
+    private DetailsPanel detailsPanel;
+    private SortAndFilter sortAndFilter;
+
 
     public MainFrame(List<DataItem> dataItems)
     {
         //Set my window properties
         setTitle("Country GDP's for the Years 2000-2015");
-        setSize(800, 600);
+        setSize(1000, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        //Table Panel
         tablePanel = new TablePanel(dataItems);
+
+        //Stats Panel
+        statsPanel = new StatsPanel(dataItems);
+
+        //Chart Panel
+        chartPanel = new ChartPanel();
+
+        //Details Panel
+        detailsPanel = new DetailsPanel();
+
+        //Sorting and filtering
+        sortAndFilter = new SortAndFilter();
+
+        //Layout
+        JPanel topPanel = new JPanel(new GridLayout(1, 2));
+        topPanel.add(statsPanel);
+        topPanel.add(sortAndFilter);
+
+        JPanel rightPanel = new JPanel(new BorderLayout());
+        rightPanel.add(chartPanel, BorderLayout.CENTER);
+        rightPanel.add(detailsPanel, BorderLayout.SOUTH);
+
+        add(topPanel, BorderLayout.NORTH);
         add(tablePanel, BorderLayout.CENTER);
+        add(rightPanel, BorderLayout.EAST);
 
         setVisible(true);
     }
