@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 //Class to read my csv file and parse the contents into DataItem objects
-public class DataLoader {
-    public static List<DataItem> loadData(String fileName) {
+public class DataLoader
+{
+    public static List<DataItem> loadData(String fileName)
+    {
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             //Read the first line for the headers
             String[] headers = br.readLine().split(",");
