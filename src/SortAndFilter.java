@@ -21,6 +21,7 @@ public class SortAndFilter extends JPanel
     private JButton countryFilterButton;
     private JPopupMenu countryPopupMenu;
     private Map<String, JCheckBox> countryCheckBoxes = new HashMap<>();
+    private JButton uncheckAllButton;
 
     public SortAndFilter(List<DataItem> dataItems, TablePanel tablePanel, ChartPanelGDP chartPanel, StatsPanel statsPanel, DetailsPanel detailsPanel)
     {
@@ -45,16 +46,33 @@ public class SortAndFilter extends JPanel
 
         countryFilterButton.addActionListener(e -> countryPopupMenu.show(countryFilterButton, 0, getHeight()));
 
+        //Uncheck button
+        uncheckAllButton = new JButton("Uncheck All");
+        uncheckAllButton.addActionListener(e -> uncheckAllCountries());
        //Checkbox filter
-        showTop10 = new JCheckBox("Top 10 GDP");
-        showBottom10 = new JCheckBox("Bottom 10 GDP");
+        showTop10 = new JCheckBox("Top 10 GDP's List");
+        showBottom10 = new JCheckBox("Bottom 10 GDP's List");
 
-        showTop10.addItemListener(e -> applyFiltering());
-        showBottom10.addItemListener(e -> applyFiltering());
+        //Uncheck one if the other is checked
+        showTop10.addItemListener(e -> {
+            if(showTop10.isSelected())
+            {
+                showBottom10.setSelected(false);
+            }
+            applyFiltering();
+        });
+        showBottom10.addItemListener(e -> {
+            if(showBottom10.isSelected())
+            {
+                showTop10.setSelected(false);
+            }
+            applyFiltering();
+        });
 
         add(sortOptions);
         add(showTop10);
         add(countryFilterButton);
+        add(uncheckAllButton);
         add(showBottom10);
 
     }
@@ -84,6 +102,15 @@ public class SortAndFilter extends JPanel
         countryPopupMenu.add(scrollPane);
     }
 
+    //Uncheck all method
+    private void uncheckAllCountries()
+    {
+        for (JCheckBox checkBox : countryCheckBoxes.values())
+        {
+            checkBox.setSelected(false);
+        }
+        applyFiltering();
+    }
     private void applySorting()
     {
         List<DataItem> sortedData = switch (sortOptions.getSelectedItem().toString())
