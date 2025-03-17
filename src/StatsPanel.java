@@ -18,9 +18,9 @@ public StatsPanel(List<DataItem> dataItems)
     setLayout(new GridLayout(3, 1));
     setBorder(BorderFactory.createTitledBorder("GDP Statistics"));
 
-    avgGDPLabel = new JLabel("Avg GDP: Calculating...");
-    maxGDPLabel = new JLabel("Max GDP: Calculating...");
-    minGDPLabel = new JLabel("Min GDP: Calculating...");
+    avgGDPLabel = new JLabel("Avg GDP: ");
+    maxGDPLabel = new JLabel("Max GDP: ");
+    minGDPLabel = new JLabel("Min GDP: ");
 
     add(avgGDPLabel);
     add(maxGDPLabel);

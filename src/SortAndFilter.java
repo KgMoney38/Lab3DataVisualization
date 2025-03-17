@@ -2,7 +2,7 @@ import org.jfree.chart.ChartPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,14 +14,21 @@ public class SortAndFilter extends JPanel
     private TablePanel tablePanel;
     private ChartPanelGDP chartPanel;
     private DetailsPanel detailsPanel;
+    private StatsPanel statsPanel;
     private List<DataItem> originalData;
 
-    public SortAndFilter(List<DataItem> dataItems, TablePanel tablePanel, ChartPanelGDP chartPanel, DetailsPanel detailsPanel)
+    //Country Filter
+    private JButton countryFilterButton;
+    private JPopupMenu countryPopupMenu;
+    private Map<String, JCheckBox> countryCheckBoxes = new HashMap<>();
+
+    public SortAndFilter(List<DataItem> dataItems, TablePanel tablePanel, ChartPanelGDP chartPanel, StatsPanel statsPanel, DetailsPanel detailsPanel)
     {
         this.originalData = dataItems;
         this.tablePanel = tablePanel;
         this.chartPanel = chartPanel;
         this.detailsPanel = detailsPanel;
+        this.statsPanel = statsPanel;
 
         setLayout(new GridLayout(1,3));
         setBorder(BorderFactory.createTitledBorder("Sort and Filter"));
@@ -30,6 +37,13 @@ public class SortAndFilter extends JPanel
         String[] sortChoices = {"Default", "Sort by GDP (Highest)", "Sort by GDP (Lowest)",  "Sort by Year"};
         sortOptions = new JComboBox<>(sortChoices);
         sortOptions.addActionListener(e -> applySorting());
+
+        //Country filters button
+        countryFilterButton = new JButton("Select Countries");
+        countryPopupMenu = new JPopupMenu();
+        populateCountryFilter(dataItems);
+
+        countryFilterButton.addActionListener(e -> countryPopupMenu.show(countryFilterButton, 0, getHeight()));
 
        //Checkbox filter
         showTop10 = new JCheckBox("Top 10 GDP");
@@ -40,8 +54,34 @@ public class SortAndFilter extends JPanel
 
         add(sortOptions);
         add(showTop10);
+        add(countryFilterButton);
         add(showBottom10);
 
+    }
+
+    //Populate countries with checkboxes
+    private void populateCountryFilter(List<DataItem> dataItems)
+    {
+        List<String> sortedCountries = dataItems.stream()
+                .map(DataItem::getCountry)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        JPanel countryPanel = new JPanel();
+        countryPanel.setLayout(new GridLayout(sortedCountries.size(), 1));
+        JScrollPane scrollPane = new JScrollPane(countryPanel);
+        scrollPane.setPreferredSize(new Dimension(200, 200));
+
+        for (String country : sortedCountries)
+        {
+            JCheckBox checkBox = new JCheckBox(country);
+            countryCheckBoxes.put(country, checkBox);
+            checkBox.addItemListener(e -> applyFiltering());
+            countryPanel.add(checkBox);
+        }
+
+        countryPopupMenu.add(scrollPane);
     }
 
     private void applySorting()
@@ -69,9 +109,21 @@ public class SortAndFilter extends JPanel
 
     private void applyFiltering()
     {
-        List<DataItem> filteredData = originalData;
+        List<DataItem> filteredData = new ArrayList<>(originalData);
+
+        //Country Filter
+        List<String> selectedCountries = countryCheckBoxes.entrySet().stream()
+                .filter(entry -> entry.getValue().isSelected())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
 
         //Filter Condition
+        if(!selectedCountries.isEmpty())
+        {
+            filteredData= filteredData.stream()
+                    .filter(item -> selectedCountries.contains(item.getCountry()))
+                    .collect(Collectors.toList());
+        }
         if (showTop10.isSelected())
         {
             filteredData = filteredData.stream()
@@ -79,7 +131,7 @@ public class SortAndFilter extends JPanel
                     .limit(10)
                     .collect(Collectors.toList());
         }
-        if (showBottom10.isSelected())
+        else if (showBottom10.isSelected())
         {
             filteredData = filteredData.stream()
                     .sorted((a,b) -> Double.compare(a.getGDP(), b.getGDP()))
@@ -106,5 +158,6 @@ public class SortAndFilter extends JPanel
         //Update Table
         tablePanel.updateTable(filteredData);
         chartPanel.updateChart(filteredData);
+        statsPanel.updateStats(filteredData);
     }
 }

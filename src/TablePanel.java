@@ -37,10 +37,19 @@ public class TablePanel extends JPanel
     public void updateTable(List<DataItem> dataItems)
     {
         tableModel.setRowCount(0);
-        dataItems.forEach(item ->
-        tableModel.addRow(new Object[] {item.getCountry(), formatGDP(item.getGDP()), item.getYear()
-        })
-        );
+       for (DataItem item : dataItems) {
+           tableModel.addRow(new Object[]{
+                   item.getCountry(),
+                   formatGDP(item.getGDP()),
+                   item.getYear()
+           });
+       }
+    }
+
+    //To allow my mainFrame access
+    public JTable getTable()
+    {
+        return table;
     }
 
     //Solely to format my gdp in decimal

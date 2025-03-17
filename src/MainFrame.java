@@ -20,7 +20,7 @@ public class MainFrame extends JFrame
     {
         //Set my window properties
         setTitle("Country GDP's for the Years 2000-2015");
-        setSize(1200, 800);
+        setSize(1800, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -37,7 +37,18 @@ public class MainFrame extends JFrame
         detailsPanel = new DetailsPanel(dataItems);
 
         //Sorting and filtering
-        sortAndFilter = new SortAndFilter(dataItems, tablePanel, chartPanel, detailsPanel);
+        sortAndFilter = new SortAndFilter(dataItems, tablePanel, chartPanel, statsPanel, detailsPanel);
+
+        //Listener for row selection
+        tablePanel.getTable().getSelectionModel().addListSelectionListener(e -> {
+            int selectedRow = tablePanel.getTable().getSelectedRow();
+            if (selectedRow >= 0) {
+                String country = tablePanel.getTable().getValueAt(selectedRow,0).toString();
+                String gdp = tablePanel.getTable().getValueAt(selectedRow,1).toString();
+                String year = tablePanel.getTable().getValueAt(selectedRow,2).toString();
+                detailsPanel.updateDetails(country, gdp, year);
+            }
+        });
 
         //Top panel
         JPanel topPanel = new JPanel(new GridLayout(1, 2));
@@ -52,7 +63,7 @@ public class MainFrame extends JFrame
 
         //Add my panels
         add(topPanel, BorderLayout.NORTH);
-        add(tablePanel, BorderLayout.CENTER);
+        add(new JScrollPane(tablePanel), BorderLayout.CENTER);
         add(rightPanel, BorderLayout.EAST);
 
         setVisible(true);
