@@ -35,7 +35,7 @@ public class SortAndFilter extends JPanel
         setBorder(BorderFactory.createTitledBorder("Sort and Filter"));
 
         //Sort drop
-        String[] sortChoices = {"Default", "Sort by GDP (Highest)", "Sort by GDP (Lowest)",  "Sort by Year"};
+        String[] sortChoices = {"Default", "Sort by GDP (Highest)", "Sort by GDP (Lowest)",  "Sort by Year", "Sort by Country (A-Z)", "Sort by Country (Z-A)"};
         sortOptions = new JComboBox<>(sortChoices);
         sortOptions.addActionListener(e -> applySorting());
 
@@ -125,6 +125,14 @@ public class SortAndFilter extends JPanel
 
             case "Sort by Year" -> originalData.stream()
                     .sorted((a, b) -> Integer.compare(a.getYear(), b.getYear()))
+                    .collect(Collectors.toList());
+
+            case "Sort by Country (A-Z)" -> originalData.stream()
+                    .sorted(Comparator.comparing(DataItem::getCountry))
+                    .collect(Collectors.toList());
+
+            case "Sort by Country (Z-A)" -> originalData.stream()
+                    .sorted(Comparator.comparing(DataItem::getCountry).reversed())
                     .collect(Collectors.toList());
 
             default -> originalData;

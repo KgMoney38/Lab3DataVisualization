@@ -9,6 +9,8 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -95,12 +97,16 @@ public class ChartPanelGDP extends JPanel
                         Collectors.groupingBy(DataItem::getYear,
                                 Collectors.summingDouble(DataItem::getGDP))));
 
+        //Sort countries alphabetically below my chart
+        List<String> sortedCountries = new ArrayList<>(countryYearGDPMap.keySet());
+        Collections.sort(sortedCountries);
+
         //Group by country and then the year
         CategoryPlot plot = chart.getCategoryPlot();
         LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer();
 
         int colorIndex = 0;
-        for (String country : countryYearGDPMap.keySet()) {
+        for (String country : sortedCountries) {
             Map<Integer, Double> yearlyGDP = countryYearGDPMap.get(country);
 
             for (Map.Entry<Integer, Double> entry : yearlyGDP.entrySet()) {

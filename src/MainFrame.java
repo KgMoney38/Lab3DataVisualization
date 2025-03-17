@@ -20,27 +20,38 @@ public class MainFrame extends JFrame
     {
         //Set my window properties
         setTitle("Country GDP's for the Years 2000-2015");
-        setSize(1800, 800);
+
+        //Cool way I found to make the application window be the same size as the users screen
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(screenSize.width, screenSize.height-60);
+
+        getContentPane().setBackground(Color.RED);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         //Table Panel
         tablePanel = new TablePanel(dataItems);
-
+        tablePanel.setBackground(Color.BLUE);
         //Stats Panel
         statsPanel = new StatsPanel(dataItems);
+        statsPanel.setBackground(Color.RED);
 
         //Chart Panel
         chartPanel = new ChartPanelGDP(dataItems);
+        chartPanel.setBackground(Color.BLUE);
 
         //Details Panel
         detailsPanel = new DetailsPanel(dataItems);
+        detailsPanel.setBackground(Color.RED);
 
         //Sorting and filtering
         sortAndFilter = new SortAndFilter(dataItems, tablePanel, chartPanel, statsPanel, detailsPanel);
+        sortAndFilter.setBackground(Color.BLUE);
 
         //Listener for row selection
         tablePanel.getTable().getSelectionModel().addListSelectionListener(e -> {
+            tablePanel.setBackground(Color.BLUE);
             int selectedRow = tablePanel.getTable().getSelectedRow();
             if (selectedRow >= 0) {
                 String country = tablePanel.getTable().getValueAt(selectedRow,0).toString();
