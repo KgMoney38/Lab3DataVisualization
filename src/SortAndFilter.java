@@ -47,7 +47,7 @@ public class SortAndFilter extends JPanel
         countryFilterButton.addActionListener(e -> countryPopupMenu.show(countryFilterButton, 0, getHeight()));
 
         //Uncheck button
-        uncheckAllButton = new JButton("Uncheck All");
+        uncheckAllButton = new JButton("Remove All Filters");
         uncheckAllButton.addActionListener(e -> uncheckAllCountries());
        //Checkbox filter
         showTop10 = new JCheckBox("Top 10 GDP's List");
@@ -109,6 +109,11 @@ public class SortAndFilter extends JPanel
         {
             checkBox.setSelected(false);
         }
+
+        //uncheck top and bottom filters
+        showTop10.setSelected(false);
+        showBottom10.setSelected(false);
+
         applyFiltering();
     }
     private void applySorting()
