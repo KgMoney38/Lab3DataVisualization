@@ -17,16 +17,23 @@ public class TablePanel extends JPanel
     private static final DecimalFormat df = new DecimalFormat("$#,###.00");
 
     //Initialize data in my table
-    public TablePanel (List<DataItem> dataItems)
-    {
+    public TablePanel (List<DataItem> dataItems) {
         setLayout(new BorderLayout());
 
         //Name for each column
         String[] columnNames = {"Country", "GDP (In US$)", "Year"};
 
         //Put the headers in my table
-        tableModel = new DefaultTableModel(columnNames,0);
+        tableModel = new DefaultTableModel(columnNames, 0) {
+            //Make table non-editable as this is a dataset
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
         table = new JTable(tableModel);
+
 
         //Make table scrollable because of so many entries
         add(new JScrollPane(table), BorderLayout.CENTER);
