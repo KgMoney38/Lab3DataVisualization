@@ -60,6 +60,7 @@ public class TablePanel extends JPanel
         return df.format(gdp);
     }
 
+    //Method to get the data that is currently displayed in my table
     public List<DataItem> getCurrentData() {
         List<DataItem> displayData = new ArrayList<>();
         int rowCount = tableModel.getRowCount();
@@ -69,6 +70,7 @@ public class TablePanel extends JPanel
             String country = (String) tableModel.getValueAt(i, 0);
             Object gdpObject = tableModel.getValueAt(i, 1);
             double gdp;
+
             if(gdpObject instanceof String)
             {
                 gdp = Double.parseDouble(((String) gdpObject).replace("$","").replace(",",""));

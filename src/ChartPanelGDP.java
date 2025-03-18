@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+//Class for my line chart
 public class ChartPanelGDP extends JPanel
 {
     private JFreeChart chart;
@@ -61,7 +62,7 @@ public class ChartPanelGDP extends JPanel
             new Color(85, 107, 47)    // Dark Olive Green
     };
 
-
+    //Set up chart
     public ChartPanelGDP(List<DataItem> dataItems)
     {
         setLayout(new BorderLayout());
@@ -82,6 +83,7 @@ public class ChartPanelGDP extends JPanel
         updateChart(dataItems);
     }
 
+    //Update when table is changed
     public void updateChart(List<DataItem> dataItems)
     {
         dataset.clear();

@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//Sort and filter class to change the view of my table data
 public class SortAndFilter extends JPanel
 {
     private JComboBox<String> sortOptions;
@@ -23,6 +24,7 @@ public class SortAndFilter extends JPanel
     private Map<String, JCheckBox> countryCheckBoxes = new HashMap<>();
     private JButton uncheckAllButton;
 
+    //Set up and initialize elements
     public SortAndFilter(List<DataItem> dataItems, TablePanel tablePanel, ChartPanelGDP chartPanel, StatsPanel statsPanel, DetailsPanel detailsPanel)
     {
         this.originalData = dataItems;
@@ -49,6 +51,7 @@ public class SortAndFilter extends JPanel
         //Uncheck button
         uncheckAllButton = new JButton("Remove All Filters");
         uncheckAllButton.addActionListener(e -> uncheckAllCountries());
+
        //Checkbox filter
         showTop10 = new JCheckBox("Top 10 GDP's List");
         showBottom10 = new JCheckBox("Bottom 10 GDP's List");
@@ -61,6 +64,7 @@ public class SortAndFilter extends JPanel
             }
             applyFiltering();
         });
+
         showBottom10.addItemListener(e -> {
             if(showBottom10.isSelected())
             {
@@ -116,6 +120,7 @@ public class SortAndFilter extends JPanel
 
         applyFiltering();
     }
+
     private void applySorting()
     {
         List<DataItem> currentTableData =tablePanel.getCurrentData();

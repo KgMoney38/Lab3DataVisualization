@@ -8,6 +8,7 @@ import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import static java.awt.AWTEventMulticaster.add;
 
+//Panel to show statistics of my currently displayed data
 public class StatsPanel extends JPanel
 {
 private JLabel avgGDPLabel, maxGDPLabel, minGDPLabel;
@@ -29,6 +30,7 @@ public StatsPanel(List<DataItem> dataItems)
     updateStats(dataItems);
 }
 
+    //Update when table data changes
     public void updateStats(List<DataItem> dataItems)
     {
 

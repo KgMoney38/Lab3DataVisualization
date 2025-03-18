@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+//Basic class to display details of individual selected rows
 public class DetailsPanel extends JPanel
 {
     private JLabel countryLabel;
