@@ -2,7 +2,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
+
 
 //Class to display my data in the table
 public class TablePanel extends JPanel
@@ -56,5 +58,37 @@ public class TablePanel extends JPanel
     private String formatGDP(double gdp)
     {
         return df.format(gdp);
+    }
+
+    public List<DataItem> getCurrentData() {
+        List<DataItem> displayData = new ArrayList<>();
+        int rowCount = tableModel.getRowCount();
+
+        for (int i = 0; i < rowCount; i++) 
+        {
+            String country = (String) tableModel.getValueAt(i, 0);
+            Object gdpObject = tableModel.getValueAt(i, 1);
+            double gdp;
+            if(gdpObject instanceof String)
+            {
+                gdp = Double.parseDouble(((String) gdpObject).replace("$","").replace(",",""));
+            }else
+            {
+                gdp = (Double) gdpObject;
+            }
+            
+            Object yearObject = tableModel.getValueAt(i, 2);
+            int year;
+            if(yearObject instanceof String)
+            {
+                year=Integer.parseInt((String) yearObject);
+            }else {
+                year = (int)yearObject;
+            }
+            
+            displayData.add(new DataItem(country, gdp, year));
+        }
+
+        return displayData;
     }
 }

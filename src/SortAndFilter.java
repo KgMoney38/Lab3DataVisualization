@@ -113,25 +113,27 @@ public class SortAndFilter extends JPanel
     }
     private void applySorting()
     {
+        List<DataItem> currentTableData =tablePanel.getCurrentData();
+
         List<DataItem> sortedData = switch (sortOptions.getSelectedItem().toString())
         {
-            case "Sort by GDP (Highest)" -> originalData.stream()
-                    .sorted((a, b) -> Double.compare(b.getGDP(), a.getGDP()))
+            case "Sort by GDP (Highest)" -> currentTableData.stream()
+                    .sorted(Comparator.comparingDouble(DataItem::getGDP).reversed())
                     .collect(Collectors.toList());
 
-            case "Sort by GDP (Lowest)" -> originalData.stream()
-                    .sorted((a, b) -> Double.compare(a.getGDP(), b.getGDP()))
+            case "Sort by GDP (Lowest)" -> currentTableData.stream()
+                    .sorted(Comparator.comparingDouble(DataItem::getGDP))
                     .collect(Collectors.toList());
 
-            case "Sort by Year" -> originalData.stream()
-                    .sorted((a, b) -> Integer.compare(a.getYear(), b.getYear()))
+            case "Sort by Year" -> currentTableData.stream()
+                    .sorted(Comparator.comparingInt(DataItem::getYear))
                     .collect(Collectors.toList());
 
-            case "Sort by Country (A-Z)" -> originalData.stream()
+            case "Sort by Country (A-Z)" -> currentTableData.stream()
                     .sorted(Comparator.comparing(DataItem::getCountry))
                     .collect(Collectors.toList());
 
-            case "Sort by Country (Z-A)" -> originalData.stream()
+            case "Sort by Country (Z-A)" -> currentTableData.stream()
                     .sorted(Comparator.comparing(DataItem::getCountry).reversed())
                     .collect(Collectors.toList());
 
@@ -140,6 +142,7 @@ public class SortAndFilter extends JPanel
 
         tablePanel.updateTable(sortedData);
         chartPanel.updateChart(sortedData);
+        statsPanel.updateStats(sortedData);
     }
 
     private void applyFiltering()
@@ -169,7 +172,8 @@ public class SortAndFilter extends JPanel
         else if (showBottom10.isSelected())
         {
             filteredData = filteredData.stream()
-                    .sorted((a,b) -> Double.compare(a.getGDP(), b.getGDP()))
+                    .sorted(Comparator.comparingDouble(DataItem::getGDP)
+                    .thenComparing(DataItem::getYear))
                     .limit(10)
                     .collect(Collectors.toList());
         }
